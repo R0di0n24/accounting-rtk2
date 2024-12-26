@@ -66,11 +66,11 @@ export const updateUser = createAsyncThunk<UserProfile, UserData, { state: RootS
 export const changePassword = createAsyncThunk<string, Passwords, { state: RootState }>(
     'user/password',
     async (passwords: Passwords, {getState}) => {
-        if (createToken(getState().user.login, passwords.oldPassword) === getState().token) {
+        // if (createToken(getState().user.login, passwords.oldPassword) === getState().token) {
             const response = await fetch(`${baseUrl}/user/password`, {
                 method: 'Put',
                 headers: {
-                    Authorization: getState().token,
+                    Authorization: createToken(getState().user.login, passwords.oldPassword),
                     'X-Password': passwords.newPassword
                 }
             })
@@ -78,8 +78,8 @@ export const changePassword = createAsyncThunk<string, Passwords, { state: RootS
                 throw new Error(`Something went wrong`)
             }
             return createToken(getState().user.login, passwords.newPassword)
-        }
-        alert('wrong password, needs to use actual password to change one')
-        return getState().token
+        // }
+        // alert('wrong password, needs to use actual password to change one')
+        // return getState().token
     }
 )
